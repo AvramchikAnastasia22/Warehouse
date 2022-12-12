@@ -27,9 +27,9 @@ public class Autorization_controller {
             SimpleDateFormat simpl=new SimpleDateFormat("dd-MM-yyyy HH:mm");
             String dat=simpl.format(date);
             User user=new User();
-            user.setName("Константин");
-            user.setSur_name("Анкуда");
-            user.setPatronymic("Викторович");
+            user.setName("Анастасия");
+            user.setSur_name("Аврамчик");
+            user.setPatronymic("Сергеевна");
             user.setName_photo_file("Men.png");
             user.setPhone("298456791");
             user.setType("Admin");

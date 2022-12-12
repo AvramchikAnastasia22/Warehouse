@@ -50,6 +50,7 @@ function open_take_order(){
     document.getElementById('take_order').hidden=true;
     document.getElementById('id_emp').value="";
     document.getElementById('id_ser').value="";
+    document.getElementById('address').value="";
     document.getElementById('FIO_supplier').value="";
     document.getElementById('order_date').value="";
     mas=document.querySelectorAll(".emp_order");

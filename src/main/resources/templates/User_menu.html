@@ -86,8 +86,8 @@
             <h2>Ближайшие поступления</h2>
             <input onkeyup="search_orders()" id="search_rec" placeholder="Поиск фильтрация">
             <table id="table_orders">
-                <tr><th hidden>id_supplier</th><th>Тип товара</th><th>ФИО поставщика</th><th>Стоимость BY</th><th>Отменить заказ товара</th></tr><br>
-                <tr th:each="order:${list_order}"><td hidden>id_supplier</td><td th:text="${order.getType()}"></td><td th:text="${order.getFIO_supplier()}"></td><td th:text="${order.getPrice()}+' BY'"></td>
+                <tr><th hidden>id_supplier</th><th>Тип товара</th><th>ФИО поставщика</th><th>Стоимость BY</th><th>Статус</th><th>Вес</th><th>Пункт выдачи</th><th>Отменить заказ товара</th></tr><br>
+                <tr th:each="order:${list_order}"><td hidden>id_supplier</td><td th:text="${order.getType()}"></td><td th:text="${order.getFIO_supplier()}"></td><td th:text="${order.getPrice()}+' BY'"></td><td th:text="${order.getStatus()}"></td><td th:text="${order.getWeightOrder()}"></td><td th:text="${order.getAddress()}"></td>
                     <td><a th:href="'/cancel_order:'+${order.getId()}" class="btn btn-danger">Отменить заказ товара</a></td></tr>
             </table>
         </div>
@@ -102,6 +102,7 @@
                 </div>
                 <ul class="list-group list-group-flush">
                     <li th:text="${supplier.getCategory()}" class="list-group-item"></li>
+                    <li th:text="${supplier.getTownSupplier()}" class="list-group-item"></li>
                     <li th:text="${supplier.getDate_settled()}" class="list-group-item"></li>
                 </ul>
             </div>
@@ -143,6 +144,15 @@
                 <input name="fio_supplier" id="FIO_supplier" placeholder="Выберите поставщика"  onkeydown="return false;" required>
                 <label>Время и день</label><br>
                 <input name="date" id="order_date" type="datetime-local" required>
+                <label>Address</label><br>
+                <input name="address" id="address" placeholder="Выберите address"  onkeydown="return false;" required>
+                <div  class="emp_order_list" id="rec_order_list">
+                    <div th:each="rec:${all_reception}" class="emp_order">
+                        <label th:text="${rec.getId()}" hidden></label>
+                        <img th:src="'/img_reception/'+${rec.getName_photo()}">
+                        <label th:text="${rec.getTown()}+' '+${rec.getAddress()}"></label>
+                    </div>
+                </div>
                 <div  class="emp_order_list" id="emp_order_list">
                     <div th:each="emp:${all_supplier}" class="emp_order">
                         <label th:text="${emp.getId()}" hidden></label>

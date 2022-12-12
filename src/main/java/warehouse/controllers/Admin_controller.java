@@ -58,7 +58,8 @@ public class Admin_controller {
     RepositoryProduct repositoryProduct;
     @Autowired
     RepositoryBanList repositoryBanList;
-
+    @Autowired
+    RepositoryReception repositoryReception;
 
     @Value("${upload.path_user}")
     private String load_user;
@@ -66,6 +67,9 @@ public class Admin_controller {
     private String load_product;
     @Value("${upload.path_supplier}")
     private  String load_supplier;
+
+    @Value("${upload.path_reception}")
+    private  String load_reception;
 
     @GetMapping("/admin_room:{id}")
     private String admin_menu(Model model, @PathVariable(value = "id")Integer id_admin) throws ParseException {
@@ -75,6 +79,7 @@ public class Admin_controller {
         List<Product>list_product=repositoryProduct.findAll();
         List<BanList>list_ban=repositoryBanList.findAll();
         List<Supplier>list_supplier=repositorySupplier.findAll();
+        List<Reception> list_reception=repositoryReception.findAll();
         personal_id=id_admin;
         String tr=trigger;
         model.addAttribute("trigger",tr);
@@ -83,6 +88,7 @@ public class Admin_controller {
         model.addAttribute("product",list_product);
         model.addAttribute("ban",list_ban);
         model.addAttribute("supplier",list_supplier);
+        model.addAttribute("reception",list_reception);
         trigger="";
         return "Admin_menu";
     }
@@ -122,11 +128,12 @@ public class Admin_controller {
     }
 
     @PostMapping("/add_product")
-    private String add_product(@RequestParam String type,@RequestParam String name_product,@RequestParam double price,@RequestParam MultipartFile photo_product) throws IOException {
+    private String add_product(@RequestParam String type,@RequestParam String name_product,@RequestParam double weightProduct,@RequestParam double price,@RequestParam MultipartFile photo_product) throws IOException {
         Product product=new Product();
         product.setName_product(name_product);
         product.setType(type);
         product.setPrice(price);
+        product.setWeight(weightProduct);
         File file=new File(load_product);
         if(!photo_product.isEmpty()){
             String uuid_file= UUID.randomUUID().toString();
@@ -197,7 +204,7 @@ public class Admin_controller {
 
     @PostMapping("/add_supplier")
     private String add_supplier(@RequestParam String name,@RequestParam String sur_name,@RequestParam String patronymic
-            ,@RequestParam String phone,@RequestParam int id_product,
+            ,@RequestParam String phone,@RequestParam String townSup,@RequestParam int id_product,
                                 @RequestParam MultipartFile photo_supplier
     ) throws IOException {
         Date date=new Date();
@@ -212,6 +219,7 @@ public class Admin_controller {
         supplier.setCategory(product.getType());
         supplier.setDate_settled(dat);
         supplier.setId_product(id_product);
+        supplier.setTownSupplier(townSup);
         File file=new File(load_supplier);
         if(!photo_supplier.isEmpty()){
             String uuid_file= UUID.randomUUID().toString();
@@ -222,6 +230,36 @@ public class Admin_controller {
         }
         repositorySupplier.save(supplier);
         trigger="supplier";
+        return "redirect:/admin_room:"+personal_id;
+    }
+
+    @PostMapping("/add_reception")
+    private String add_reception(@RequestParam String address,@RequestParam String town, @RequestParam String timeWork
+            , @RequestParam MultipartFile photo_reception
+    ) throws IOException {
+       Reception reception = new Reception();
+       reception.setAddress(address);
+       reception.setTown(town);
+       reception.setTimeWork(timeWork);
+        File file=new File(load_reception);
+        if(!photo_reception.isEmpty()){
+            String uuid_file= UUID.randomUUID().toString();
+            String Or_file_name=photo_reception.getOriginalFilename().substring(photo_reception.getOriginalFilename().indexOf("."),photo_reception.getOriginalFilename().length());
+            String file_name=uuid_file+"_"+Or_file_name;
+            photo_reception.transferTo(new File(file.getAbsolutePath()+"/"+file_name));
+            reception.setName_photo(file_name);
+        }
+        repositoryReception.save(reception);
+        trigger="reception";
+        return "redirect:/admin_room:"+personal_id;
+    }
+    @GetMapping("/deleted_reception:{id}")
+    private String deleted_reception(@PathVariable(value = "id") Integer id){
+        File file=new File(load_reception);
+        File file1=new File(file.getAbsolutePath()+"/"+repositoryReception.findById(id).get().getName_photo());
+        file1.delete();
+        repositoryReception.deleteById(id);
+        trigger="reception";
         return "redirect:/admin_room:"+personal_id;
     }
     @GetMapping("/deleted_product:{id}")
@@ -235,7 +273,7 @@ public class Admin_controller {
                 list.get(i).setId_product(-1);
             }
         }
-       repositorySupplier.saveAll(list);
+        repositorySupplier.saveAll(list);
         repositoryProduct.deleteById(id_product);
         trigger="product";
         return "redirect:/admin_room:"+personal_id;

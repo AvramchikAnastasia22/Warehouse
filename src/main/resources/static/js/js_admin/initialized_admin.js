@@ -31,6 +31,9 @@ function initialized_dispay(){
     if(document.getElementById('trigger').textContent=="supplier"){
         open_supplier()
     }
+    if(document.getElementById('trigger').textContent=="reception"){
+        open_reception()
+    }
     if(document.getElementById('trigger').textContent=="settins"){
         open_settins();
         document.getElementById('but_update_settins').style.backgroundColor="#00FF00FF";
@@ -44,6 +47,7 @@ function initialized(){
     initialized_dispay();
     initialized_user();
     document.getElementById('list_prod').style.color="#866c03";
+    document.getElementById('list_rec').style.color="#866c03";
     document.getElementById('lis_supplier').style.color="#866c03";
 }
 initialized();

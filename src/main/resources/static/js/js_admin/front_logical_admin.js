@@ -4,6 +4,7 @@ function open_settins(){
     document.getElementById('supplier_admin').hidden=true;
     document.getElementById('ban_list_admin').hidden=true;
     document.getElementById('user_admin').hidden=true;
+    document.getElementById('reception_admin').hidden=true;
 
 }
 function open_ban_list(){
@@ -12,6 +13,7 @@ function open_ban_list(){
     document.getElementById('supplier_admin').hidden=true;
     document.getElementById('ban_list_admin').hidden=false;
     document.getElementById('user_admin').hidden=true;
+    document.getElementById('reception_admin').hidden=true;
 }
 function open_supplier(){
     document.getElementById('settins_admin').hidden=true;
@@ -19,6 +21,7 @@ function open_supplier(){
     document.getElementById('supplier_admin').hidden=false;
     document.getElementById('ban_list_admin').hidden=true;
     document.getElementById('user_admin').hidden=true;
+    document.getElementById('reception_admin').hidden=true;
 }
 function open_registration_supplier(){
     document.getElementById('reg_supplier').style.color="#866c03";
@@ -44,6 +47,7 @@ function open_list_supplier(){
     document.getElementById('lis_supplier').style.color="#866c03";
     document.getElementById('add_supplier').hidden=true;
     document.getElementById('list_supplier').hidden=false;
+    document.getElementById('reception_admin').hidden=true;
 }
 function open_user(){
     document.getElementById('settins_admin').hidden=true;
@@ -51,6 +55,7 @@ function open_user(){
     document.getElementById('supplier_admin').hidden=true;
     document.getElementById('ban_list_admin').hidden=true;
     document.getElementById('user_admin').hidden=false;
+    document.getElementById('reception_admin').hidden=true;
 }
 function open_product(){
     document.getElementById('settins_admin').hidden=true;
@@ -58,12 +63,27 @@ function open_product(){
     document.getElementById('supplier_admin').hidden=true;
     document.getElementById('ban_list_admin').hidden=true;
     document.getElementById('user_admin').hidden=true;
+    document.getElementById('reception_admin').hidden=true;
+}
+function open_reception(){
+    document.getElementById('settins_admin').hidden=true;
+    document.getElementById('product_admin').hidden=true;
+    document.getElementById('supplier_admin').hidden=true;
+    document.getElementById('ban_list_admin').hidden=true;
+    document.getElementById('user_admin').hidden=true;
+    document.getElementById('reception_admin').hidden=false;
 }
 function open_list_product(){
     document.getElementById('reg_prod').style.color="";
     document.getElementById('list_prod').style.color="#866c03";
     document.getElementById('add_product').hidden=true;
     document.getElementById('list_product').hidden=false;
+}
+function open_list_reception(){
+    document.getElementById('reg_rec').style.color="";
+    document.getElementById('list_rec').style.color="#866c03";
+    document.getElementById('add_reception').hidden=true;
+    document.getElementById('list_reception').hidden=false;
 }
 function open_block_menu(data){
     document.getElementById('block_menu').hidden=false;
@@ -92,6 +112,27 @@ function open_add_product(){
     document.getElementById('add_product').hidden=false;
     document.getElementById('list_product').hidden=true;
 }
+
+function open_add_reception(){
+    document.getElementById('reg_rec').style.color="#866c03";
+    document.getElementById('list_rec').style.color="";
+    date1=new Date();
+    var date="";
+    if(date1.getDate()<10){
+        date="0";
+    }
+    date=date+date1.getDate()+".";
+    if(date1.getMonth()+1<10)
+    {
+        date=date+"0";
+    }
+    date=date+(date1.getMonth()+1)+".";
+    date=date+date1.getFullYear();
+    document.getElementById('today_date_reg_reception').value=date;
+    document.getElementById('add_reception').hidden=false;
+    document.getElementById('list_reception').hidden=true;
+}
+
 function add_new_photo_user(){
     let file=document.getElementById('personal_photo').files[0];
     let reader=new FileReader();
@@ -108,6 +149,14 @@ function add_new_photo_product(){
         document.getElementById('product_prev').src=reader.result;
     }
 }
+function add_new_photo_reception(){
+    let file=document.getElementById('add_photo_reception').files[0];
+    let reader=new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload=function (){
+        document.getElementById('reception_prev').src=reader.result;
+    }
+}
 function add_new_photo_supplier(){
     let file=document.getElementById('add_photo_supplier').files[0];
     let reader=new FileReader();
@@ -118,6 +167,9 @@ function add_new_photo_supplier(){
 }
 function hover_product(){
     document.getElementById('lab_product').hidden=false;
+}
+function hover_reception(){
+    document.getElementById('lab_reception').hidden=false;
 }
 function hover_supplier(){
     document.getElementById('lab_supplier').hidden=false;
@@ -136,6 +188,9 @@ function hover_ban_list(){
 }
 function leave_product(){
     document.getElementById('lab_product').hidden=true;
+}
+function leave_reception(){
+    document.getElementById('lab_reception').hidden=true;
 }
 function leave_supplier() {
     document.getElementById('lab_supplier').hidden=true;

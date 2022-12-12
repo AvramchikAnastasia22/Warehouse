@@ -14,6 +14,10 @@ function check_photo_supplier(){
     document.getElementById('label_supplier').style  .color="red";
     setTimeout(color_default,5000,document.getElementById('label_supplier'));
 }
+function check_photo_reception(){
+    document.getElementById('label_reception').style  .color="red";
+    setTimeout(color_default,5000,document.getElementById('label_reception'));
+}
 function check_supplier_category(){
     document.getElementById('category_supplier').style.border="2px solid red";
     setTimeout(color_border_default,5000, document.getElementById('category_supplier'));

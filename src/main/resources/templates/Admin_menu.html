@@ -37,6 +37,8 @@
             <label th:text="${pers_info.getLogin()}"></label>
         </div>
         <div class="tools_button">
+            <button onmouseenter="hover_reception()" onmouseleave="leave_reception()" onclick="open_reception()" class="fa fa-list-alt" aria-hidden="true"></button>
+            <label id="lab_reception" hidden>Пункт выдачи</label>
             <button onmouseenter="hover_product()" onmouseleave="leave_product()" onclick="open_product()" class="fa fa-list-alt" aria-hidden="true"></button>
             <label id="lab_product" hidden>Товары на складе</label>
             <button onmouseenter="hover_supplier()" onmouseleave="leave_supplier()" onclick="open_supplier()" class="fa fa-users" aria-hidden="true"></button>
@@ -115,6 +117,56 @@
             </div>
         </div>
     </div>
+
+
+
+
+    <div class="product_admin"id="reception_admin"hidden>
+        <div class="product_tools">
+            <button id="reg_rec" onclick="open_add_reception()">Добавить пункт выдачи</button>
+            <button id="list_rec" onclick="open_list_reception()">Список пунктов</button>
+        </div>
+        <div class="list_product" id="list_reception" >
+            <div th:each="recept:${reception}" class="product">
+                <label hidden></label>
+                <div class="product_photo">
+                    <img th:src="'/img_reception/'+${recept.getName_photo()}">
+                    <label th:text="${recept.getTown()}"></label>
+                </div>
+                <div class="product_info">
+                    <ul>
+                        <li ><i style="float: left;margin-top: 5px;margin-left: 10px"  class="fa fa-github-alt" aria-hidden="true"></i><label th:text="${recept.getAddress()}"></label></li>
+                        <li ><i style="float: left;margin-top: 5px;margin-left: 10px" class="fa fa-money" aria-hidden="true"></i><label th:text="${recept.getTimeWork()}"></label></li>
+                    </ul>
+                    <a th:href="'/deleted_reception:'+${recept.getId()}" class="btn btn-danger">Удалить</a>
+                </div>
+            </div>
+        </div>
+        <div class="add_product" id="add_reception" hidden>
+            <form th:action="'/add_reception'" method="post" enctype="multipart/form-data">
+                <h2>Добавление пункта выдачи</h2><br>
+                <div style="margin-left: 30px;position: absolute;background-color: #6e6c6c">
+                    <img id="reception_prev"><br>
+                    <input name="photo_reception"  onchange="add_new_photo_reception()" style=" background-color: transparent; width: 0.1px;height: 0.1px;opacity: 0;overflow: hidden;position: absolute;z-index: -1;" id="add_photo_reception" type="file" required>
+                    <label for="add_photo_reception">Загрузить фото</label>
+                </div>
+                <div class="add_product_info" >
+                    <input name="town" placeholder="Введите город" required>
+                    <input name="address" placeholder="Введите адресс" required>
+                    <input name="timeWork" placeholder="Введите время работы" required>
+                </div>
+                <button type="submit" class="btn btn-success">Сохранить</button>
+            </form>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
     <div class="product_admin"id="product_admin"hidden>
         <div class="product_tools">
             <button id="reg_prod" onclick="open_add_product()">Оформить заявку на товар</button>
@@ -131,6 +183,7 @@
                     <ul>
                         <li ><i style="float: left;margin-top: 5px;margin-left: 10px"  class="fa fa-github-alt" aria-hidden="true"></i><label th:text="${prod.getType()}"></label></li>
                         <li ><i style="float: left;margin-top: 5px;margin-left: 10px" class="fa fa-money" aria-hidden="true"></i><label th:text="${prod.getPrice()}+' BY'"></label></li>
+                        <li ><i style="float: left;margin-top: 5px;margin-left: 10px" class="fa fa-money" aria-hidden="true"></i><label th:text="${prod.getWeight()}+' кг'"></label></li>
                     </ul>
                     <a th:href="'/deleted_product:'+${prod.getId()}" class="btn btn-danger">Удалить</a>
                 </div>
@@ -148,6 +201,7 @@
                     <input name="name_product" placeholder="Введите название" required>
                     <input name="price" placeholder="Введите стоимость товара" onkeyup ="this.value=this.value.replace(/[^\d.]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" required>
                     <input name="type" placeholder="Введите вид товара" required>
+                    <input name="weight" placeholder="Введите вес товара" onkeyup ="this.value=this.value.replace(/[^\d.]/g,'')" onafterpaste="this.value=this.value.replace(/[^\d.]/g,'')" required>
                     <input id="today_date_reg_product" placeholder="Cегодняшняя дата" readonly>
                 </div>
                 <button type="submit" class="btn btn-success">Сохранить</button>
@@ -172,6 +226,7 @@
                    <input name="name" placeholder="Введите имя поставщика" required>
                    <input name="sur_name" placeholder="Введите фамилию поставщика" required>
                    <input name="patronymic" placeholder="Введите отчество поставщика" required>
+                   <input name="townSup" placeholder="Введите город поставщика" required>
                </div>
                <div class="reg_emoloyee_3">
                    <input name="phone" placeholder="Введите номер тел supplier" onkeyup="this.value = this.value.replace(/[^\d]/g,'');" minlength="9" maxlength="9" required>
@@ -202,6 +257,8 @@
                     <input th:value="${emp.getSecond_name()}" placeholder="Фамилия" readonly><br>
                     <label>Отчество</label><br>
                     <input th:value="${emp.getPatronymic()}" placeholder="Отчество" readonly><br>
+                    <label>Город</label><br>
+                    <input th:value="${emp.getTownSupplier()}" placeholder="Город" readonly><br>
                 </div>
                 <div>
                     <label>Номер тел</label><br>

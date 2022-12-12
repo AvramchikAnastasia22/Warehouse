@@ -71,6 +71,7 @@ public class User_controller {
 
     @Value("${upload.path_user}")
     private String load_user;
+
     @Autowired
     RepositorySupplier repositorySupplier;
     @Autowired
@@ -81,6 +82,9 @@ public class User_controller {
     RepositoryHistory repositoryHistory;
     @Autowired
     RepositoryProduct repositoryProduct;
+
+    @Autowired
+    RepositoryReception repositoryReception;
 
     @PostMapping("/update_settins_user")
     private String update_settins(@RequestParam String name_set, @RequestParam String sur_set, @RequestParam String patr_set,
@@ -125,6 +129,7 @@ public class User_controller {
         List<History> listHistory=repositoryHistory.findAll();
         List<Orders>listOrders=repositoryOrders.findAll();
         List<Product>listProduct=repositoryProduct.findAll();
+        List<Reception> listReception=repositoryReception.findAll();
         String tr=trigger;
         model.addAttribute("trigger",tr);
         model.addAttribute("pers_info",user);
@@ -132,12 +137,13 @@ public class User_controller {
         model.addAttribute("list_history",sort_History(listHistory));
         model.addAttribute("list_order",sort_record(listOrders));
         model.addAttribute("list_product",listProduct);
+        model.addAttribute("all_reception",listReception);
         trigger="";
         return "User_menu";
     }
 
     @PostMapping("/add_order")
-    private String add_order(@RequestParam int id_product,@RequestParam int id_supplier,@RequestParam String fio_supplier,
+    private String add_order(@RequestParam int id_product,@RequestParam int id_supplier,@RequestParam int id_reception,@RequestParam String fio_supplier,
                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                              LocalDateTime date
     )
@@ -145,17 +151,21 @@ public class User_controller {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
         String dat = date.format(formatter);
         User user=repositoryUser.findById(pers_id).get();
+        Reception reception=repositoryReception.findById(id_reception).get();
+        Product product= repositoryProduct.findById(id_product).get();
         Orders orders=new Orders();
         orders.setStatus("Ожидается");
         orders.setId_user(pers_id);
         orders.setId_supplier(id_supplier);
-        orders.setPrice(repositoryProduct.findById(id_product).get().getPrice());
-     //   orders.setPrice(repositoryOrders.findById(id_product).get().getPrice());
+        orders.setPrice(product.getPrice());
         orders.setId_product(id_product);
         orders.setFIO_supplier(fio_supplier);
         orders.setFIO_user(user.getName()+" "+user.getSur_name()+" "+user.getPatronymic());
         orders.setDate(dat);
-        orders.setType(repositoryProduct.findById(id_product).get().getType());
+        orders.setType(product.getType());
+        orders.setId_reception(id_reception);
+        orders.setAddress(reception.getTown()+", "+reception.getAddress());
+        orders.setWeightOrder(product.getWeight());
         repositoryOrders.save(orders);
         trigger="order";
         return "redirect:/user_room:"+pers_id;
