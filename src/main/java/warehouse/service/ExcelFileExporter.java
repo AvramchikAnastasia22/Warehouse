@@ -56,6 +56,7 @@ public class ExcelFileExporter implements ExcelExporter {
         createCell(row, 3, "Отчество", style);
         createCell(row, 4, "Телефон", style);
         createCell(row, 5, "Категория поставляемого товара", style);
+        createCell(row, 6, "Город", style);
     }
 
  /*   public void export(HttpServletResponse response) throws IOException{
@@ -85,6 +86,7 @@ public class ExcelFileExporter implements ExcelExporter {
             createCell(row, columnCount++, supplier.getPatronymic(), style);
             createCell(row, columnCount++, supplier.getPhone(), style);
             createCell(row, columnCount++, supplier.getCategory(), style);
+            createCell(row, columnCount++, supplier.getTownSupplier(), style);
         }
 
 
